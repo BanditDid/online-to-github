@@ -20,8 +20,7 @@
             </a>
             <button class="btn-nav-icon btn-join-icon" onclick="openJoinModal()" title="เข้าร่วมห้อง">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                    <path
-                        d="M3 11h2v2H3v-2zm4-4h2v2H7V7zm0 4h2v2H7v-2zm0 4h2v2H7v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zM3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5z" />
+                    <path d="M3 11h2v2H3v-2zm4-4h2v2H7V7zm0 4h2v2H7v-2zm0 4h2v2H7v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zM3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5z"/>
                 </svg>
             </button>
         </div>
@@ -31,42 +30,25 @@
         <div class="hero-content">
             <div class="neon-pill">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                 </svg>
                 KARAOKE ฟรี!
                 <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                 </svg>
             </div>
-            <p class="welcome-text">ยินดีต้อนรับ! <span class="heart-icon">❤️</span> <a href="#">สนับสนุนเว็บไซต์</a>
-            </p>
+            <p class="welcome-text">ยินดีต้อนรับ! <span class="heart-icon">❤️</span> <a href="#">สนับสนุนเว็บไซต์</a></p>
             <h1 class="main-title">ร้องคาราโอเกะ</h1>
             <h2 class="sub-title-gradient">ฟรี! ไม่เสียเงิน</h2>
             <p class="subtitle">แหกปาก (Haekpak.fun) | ระบบสุดล้ำ | เพลงฮิตอัปเดตทุกวัน | ไม่ต้องโหลด</p>
 
             <div class="search-section">
-                <div class="search-filter-toggle landing-toggle">
-                    <span class="toggle-label">ค้นเฉพาะคาราโอเกะ</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="karaoke-filter-toggle" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
                 <div class="search-box">
-                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        width="22" height="22">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
                     <input type="text" id="search-input" placeholder="ค้นหาเพลง ศิลปิน หรือรหัสเพลง...">
-                    <button class="btn-clear-input" id="clear-search-btn" onclick="clearSearchInput()"
-                        style="display: none;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                            stroke-linecap="round" width="18" height="18">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
                     <button class="btn-search" onclick="performSearch()">ค้นหา</button>
                 </div>
             </div>
@@ -76,8 +58,7 @@
                 <div id="results-list" class="results-list">
                     <!-- Search results will be injected here -->
                 </div>
-                <button id="load-more" class="btn-load-more" style="display: none;"
-                    onclick="loadMore()">โหลดเพิ่มเติม</button>
+                <button id="load-more" class="btn-load-more" style="display: none;">โหลดเพิ่มเติม</button>
             </div>
 
             <div id="landing-features">
@@ -85,8 +66,7 @@
                     <div class="feature-card">
                         <div class="feature-icon icon-mic">
                             <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-                                <path
-                                    d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+                                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                             </svg>
                         </div>
                         <h3>ร้องฟรีไม่อั้น</h3>
@@ -95,8 +75,7 @@
                     <div class="feature-card">
                         <div class="feature-icon icon-qr">
                             <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-                                <path
-                                    d="M3 11h2v2H3v-2zm4-4h2v2H7V7zm0 4h2v2H7v-2zm0 4h2v2H7v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zM3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5z" />
+                                <path d="M3 11h2v2H3v-2zm4-4h2v2H7V7zm0 4h2v2H7v-2zm0 4h2v2H7v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zM3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5z"/>
                             </svg>
                         </div>
                         <h3>รีโมตคอนโทรล</h3>
@@ -105,8 +84,7 @@
                     <div class="feature-card">
                         <div class="feature-icon icon-star">
                             <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-                                <path
-                                    d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2zm0 4.4l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4l-3.77 2.58 1-4.28-3.32-2.88 4.38-.38L12 6.4z" />
+                                <path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2zm0 4.4l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4l-3.77 2.58 1-4.28-3.32-2.88 4.38-.38L12 6.4z"/>
                             </svg>
                         </div>
                         <h3>อัปเดตตลอด</h3>
@@ -149,48 +127,9 @@
     </div>
 
     <script>
-        let searchTimeout;
-        let currentPage = 1;
-        let currentSearchQuery = '';
-        const searchInputEl = document.getElementById('search-input');
-        const clearSearchBtn = document.getElementById('clear-search-btn');
-
-        // Toggle clear button visibility
-        searchInputEl.addEventListener('input', () => {
-            clearSearchBtn.style.display = searchInputEl.value.length > 0 ? 'flex' : 'none';
-        });
-
-        function clearSearchInput() {
-            searchInputEl.value = '';
-            clearSearchBtn.style.display = 'none';
-            searchInputEl.focus();
-        }
-
-        // Toggle switch listener - focus input and re-search
-        document.getElementById('karaoke-filter-toggle').addEventListener('change', () => {
-            searchInputEl.focus();
-            if (searchInputEl.value.trim().length >= 2) {
-                performSearch();
-            }
-        });
-
-        // Auto-search logic
-        searchInputEl.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            const query = e.target.value.trim();
-            if (query.length >= 2) {
-                searchTimeout = setTimeout(() => {
-                    performSearch();
-                }, 1500);
-            }
-        });
-
         async function performSearch() {
             const query = document.getElementById('search-input').value;
             if (!query) return;
-
-            currentSearchQuery = query;
-            currentPage = 1;
 
             const resultsContainer = document.getElementById('results-container');
             const features = document.getElementById('landing-features');
@@ -202,8 +141,7 @@
             features.style.display = 'none';
 
             try {
-                const karaokeOnly = document.getElementById('karaoke-filter-toggle').checked;
-                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&karaokeOnly=${karaokeOnly}&page=${currentPage}`);
+                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
                 const songs = await response.json();
 
                 resultsList.innerHTML = '';
@@ -220,59 +158,20 @@
                             <span class="song-duration">${song.duration}</span>
                         </div>
                     `;
+                    // Redirect to host or show modal to join room and add
                     card.onclick = () => {
                         window.location.href = `host.html?add=${song.id}`;
                     };
                     resultsList.appendChild(card);
                 });
 
-                if (songs.length >= 10) {
+                if (songs.length > 0) {
                     document.getElementById('load-more').style.display = 'block';
-                } else {
-                    document.getElementById('load-more').style.display = 'none';
                 }
 
             } catch (error) {
                 console.error('Search failed:', error);
                 resultsList.innerHTML = '<div class="error">การค้นหาขัดข้อง กรุณาลองใหม่</div>';
-            }
-        }
-
-        async function loadMore() {
-            currentPage++;
-            const loadMoreBtn = document.getElementById('load-more');
-            loadMoreBtn.innerText = 'กำลังโหลด...';
-
-            try {
-                const karaokeOnly = document.getElementById('karaoke-filter-toggle').checked;
-                const response = await fetch(`/api/search?q=${encodeURIComponent(currentSearchQuery)}&karaokeOnly=${karaokeOnly}&page=${currentPage}`);
-                const songs = await response.json();
-
-                const resultsList = document.getElementById('results-list');
-                songs.forEach(song => {
-                    const card = document.createElement('div');
-                    card.className = 'song-result-card';
-                    card.innerHTML = `
-                        <img src="${song.thumbnail}" class="song-thumb">
-                        <div class="song-details">
-                            <h4 class="song-title">${song.title}</h4>
-                            <p class="song-author">${song.author}</p>
-                            <span class="song-duration">${song.duration}</span>
-                        </div>
-                    `;
-                    card.onclick = () => {
-                        window.location.href = `host.html?add=${song.id}`;
-                    };
-                    resultsList.appendChild(card);
-                });
-
-                loadMoreBtn.innerText = 'โหลดเพิ่มเติม';
-                if (songs.length < 10) {
-                    loadMoreBtn.style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Load more failed:', error);
-                loadMoreBtn.innerText = 'โหลดเพิ่มเติม';
             }
         }
 
@@ -298,10 +197,7 @@
 
         // Allow Enter key to search
         document.getElementById('search-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                clearTimeout(searchTimeout);
-                performSearch();
-            }
+            if (e.key === 'Enter') performSearch();
         });
 
         // Close modal when clicking outside

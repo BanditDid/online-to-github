@@ -22,13 +22,11 @@ const generateRoomId = () => Math.floor(100000 + Math.random() * 900000).toStrin
 // Search API using ytsr
 app.get('/api/search', async (req, res) => {
     const query = req.query.q;
-    const karaokeOnly = req.query.karaokeOnly !== 'false'; // Default to true
     if (!query) return res.status(400).json({ error: 'Query is required' });
 
     try {
-        // Optionally enforce "karaoke" search
-        const searchQuery = karaokeOnly ? `${query} karaoke` : query;
-        const searchResults = await ytsr(searchQuery, { limit: 15 });
+        // Enforce "karaoke" search
+        const searchResults = await ytsr(`${query} karaoke`, { limit: 15 });
         const songs = searchResults.items
             .filter(item => item.type === 'video')
             .map(video => ({
@@ -62,16 +60,6 @@ io.on('connection', (socket) => {
             console.log(`User ${socket.id} joined room ${roomId}`);
         } else {
             socket.emit('error', 'Room not found');
-        }
-    });
-
-    // Request full sync (for periodic sync or manual refresh)
-    socket.on('request-sync', (roomId) => {
-        if (rooms[roomId]) {
-            socket.emit('full-sync', {
-                queue: rooms[roomId].queue,
-                currentSong: rooms[roomId].currentSong
-            });
         }
     });
 

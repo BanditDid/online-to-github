@@ -208,100 +208,15 @@ body {
     color: rgba(255, 255, 255, 0.4);
 }
 
+/* Fix autocomplete background color */
 .search-box input:-webkit-autofill,
 .search-box input:-webkit-autofill:hover,
 .search-box input:-webkit-autofill:focus,
 .search-box input:-webkit-autofill:active {
-    transition: background-color 5000s ease-in-out 0s;
+    -webkit-box-shadow: 0 0 0 50px #1e1e1e inset !important;
     -webkit-text-fill-color: white !important;
-}
-
-/* Clear Input Button */
-.btn-clear-input {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.5;
-    transition: 0.3s;
-    flex-shrink: 0;
-    color: white;
-}
-
-.btn-clear-input:hover {
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-}
-
-/* Karaoke Filter Toggle */
-.search-filter-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.toggle-label {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: 500;
-}
-
-.toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 46px;
-    height: 24px;
-}
-
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.toggle-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.15);
-    transition: 0.3s;
-    border-radius: 24px;
-}
-
-.toggle-slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.3s;
-    border-radius: 50%;
-}
-
-.toggle-switch input:checked+.toggle-slider {
-    background-color: var(--accent-color, #00f2ff);
-}
-
-.toggle-switch input:checked+.toggle-slider:before {
-    transform: translateX(22px);
-}
-
-/* Landing page toggle - constrained within search box width */
-.landing-toggle {
-    max-width: 600px;
-    margin: 0 auto 12px auto;
-    padding-right: 5px;
+    background-color: transparent !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 .btn-close {
@@ -550,9 +465,9 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 10px 0 12px 0;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.3) 80%, transparent 100%);
+    padding: 15px 0 18px 0;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    background: rgba(0, 0, 0, 0.95);
     z-index: 10;
     transition: transform 0.4s ease, opacity 0.4s ease;
     box-sizing: border-box;
@@ -567,12 +482,12 @@ body {
 .time-row {
     display: flex;
     justify-content: space-between;
-    padding: 0 20px 4px 20px;
+    padding: 0 20px 8px 20px;
 }
 
 .progress-bar-container {
     width: calc(100% - 40px);
-    margin: 0 auto 10px auto;
+    margin: 0 auto 15px auto;
     height: 5px;
     background: rgba(255, 255, 255, 0.25);
     position: relative;
@@ -738,15 +653,14 @@ body {
     top: 0;
     width: 400px;
     height: 100%;
-    background: rgba(8, 8, 8, 0.85);
-    backdrop-filter: blur(40px) saturate(180%);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(30px);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
-    padding: 30px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    box-shadow: -15px 0 40px rgba(0, 0, 0, 0.8);
 }
 
 .side-panel.active {
@@ -807,31 +721,11 @@ body {
 /* Queue Card Styling */
 .queue-card {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 12px;
-    margin-bottom: 14px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    overflow: hidden;
-}
-
-.queue-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
-    pointer-events: none;
-}
-
-.queue-card:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(0, 242, 255, 0.3);
-    transform: translateX(-5px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 242, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 12px;
+    transition: 0.3s;
 }
 
 .queue-card-inner {
@@ -841,16 +735,10 @@ body {
 }
 
 .queue-card-thumb {
-    width: 70px;
-    height: 40px;
+    width: 60px;
+    height: 35px;
     object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: 0.3s;
-}
-
-.queue-card:hover .queue-card-thumb {
-    transform: scale(1.1);
+    border-radius: 4px;
 }
 
 .queue-card-info {
@@ -1152,12 +1040,14 @@ body {
     box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
 }
 
+/* Fix autocomplete for join inputs */
 .join-input-group input:-webkit-autofill,
 .join-input-group input:-webkit-autofill:hover,
 .join-input-group input:-webkit-autofill:focus,
 .join-input-group input:-webkit-autofill:active {
-    transition: background-color 5000s ease-in-out 0s;
+    -webkit-box-shadow: 0 0 0 50px #2a2a2a inset !important;
     -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 .btn-join-room {
@@ -1192,26 +1082,15 @@ body {
     padding: 15px 25px;
     margin-bottom: 25px;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
 .modal-search-box input {
-    flex: 1;
+    width: 100%;
     background: transparent;
     border: none;
     color: white;
     font-size: 1.05rem;
     outline: none;
-}
-
-.modal-search-box input:-webkit-autofill,
-.modal-search-box input:-webkit-autofill:hover,
-.modal-search-box input:-webkit-autofill:focus,
-.modal-search-box input:-webkit-autofill:active {
-    transition: background-color 5000s ease-in-out 0s;
-    -webkit-text-fill-color: white !important;
 }
 
 .modal-results-list {
@@ -1533,26 +1412,15 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
     padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
 .search-input-group input {
-    flex: 1;
+    width: 100%;
     background: transparent;
     border: none;
     color: white;
     font-size: 0.95rem;
     outline: none;
-}
-
-.search-input-group input:-webkit-autofill,
-.search-input-group input:-webkit-autofill:hover,
-.search-input-group input:-webkit-autofill:focus,
-.search-input-group input:-webkit-autofill:active {
-    transition: background-color 5000s ease-in-out 0s;
-    -webkit-text-fill-color: white !important;
 }
 
 /* Queue List */
@@ -1746,7 +1614,6 @@ body {
 }
 
 @media (max-width: 768px) {
-
     /* Landing Page Mobile */
     .navbar {
         padding: 15px 4%;
@@ -2208,112 +2075,4 @@ body {
         padding: 10px;
         font-size: 0.8rem;
     }
-}
-
-/* Custom Confirm Modal */
-.confirm-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-}
-
-.confirm-modal.active {
-    display: flex;
-    animation: fadeIn 0.2s ease;
-}
-
-.confirm-modal-content {
-    background: linear-gradient(145deg, rgba(30, 30, 35, 0.98), rgba(20, 20, 25, 0.98));
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 35px 40px;
-    text-align: center;
-    max-width: 380px;
-    width: 90%;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6),
-        0 0 40px rgba(255, 50, 100, 0.1);
-    animation: scaleIn 0.25s ease;
-}
-
-@keyframes scaleIn {
-    from {
-        transform: scale(0.9);
-        opacity: 0;
-    }
-
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.confirm-icon {
-    margin-bottom: 20px;
-    color: #ff6b6b;
-}
-
-.confirm-icon svg {
-    filter: drop-shadow(0 0 15px rgba(255, 107, 107, 0.4));
-}
-
-.confirm-modal-content h3 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 12px;
-}
-
-.confirm-modal-content p {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin-bottom: 28px;
-}
-
-.confirm-buttons {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
-
-.btn-confirm-cancel,
-.btn-confirm-ok {
-    padding: 12px 28px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-}
-
-.btn-confirm-cancel {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.btn-confirm-cancel:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.btn-confirm-ok {
-    background: linear-gradient(135deg, #ff4d6d, #c9184a);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
-}
-
-.btn-confirm-ok:hover {
-    background: linear-gradient(135deg, #ff6b88, #d4225a);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 77, 109, 0.4);
 }
