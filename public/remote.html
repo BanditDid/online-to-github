@@ -4,108 +4,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>แหกปาก Remote</title>
+    <title>DID Remote</title>
     <link rel="stylesheet" href="style.css">
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 
-<body class="remote-page">
-    <div class="remote-container">
-        <!-- Header -->
-        <header class="remote-header">
-            <h2>แหกปาก Remote</h2>
-            <div id="connection-status" class="status-indicator">
+<body class="remote-page-v2">
+    <!-- Top Brand Bar -->
+    <div class="remote-brand-bar">
+        <div class="brand-logo">🎤 <span>Karaoke</span></div>
+        <button class="btn-share-icon" onclick="openShareModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                <polyline points="16,6 12,2 8,6"></polyline>
+                <line x1="12" y1="2" x2="12" y2="15"></line>
+            </svg>
+        </button>
+    </div>
+
+    <div class="remote-main-content">
+        <!-- Title & Status -->
+        <div class="remote-title-section">
+            <h1>DID Remote</h1>
+            <p class="user-display" onclick="showNameModal()" style="cursor: pointer;">
+                ผู้ใช้งาน: <span id="user-name-display">-</span> ✏️
+            </p>
+            <div class="connection-badge">
                 <span class="dot"></span>
-                <span class="status-text">เชื่อมต่อแล้ว</span>
+                <span>เชื่อมต่อแล้ว</span>
             </div>
-        </header>
+        </div>
 
         <!-- Now Playing Card -->
-        <section class="now-playing-section">
-            <p class="section-label">กำลังเล่น</p>
-            <div class="now-playing-card">
-                <div class="np-info">
-                    <img id="np-thumb" src="https://via.placeholder.com/120x68" class="np-thumb">
-                    <div class="np-details">
-                        <h4 id="np-title">Welcome to Karaoke</h4>
-                        <p id="np-artist">Ready to sing? Scan QR or Add song!</p>
-                    </div>
-                </div>
-                <div class="np-progress-area">
-                    <div class="progress-bar-container">
-                        <div id="np-progress-fill" class="progress-fill"></div>
-                    </div>
-                    <div class="time-info">
-                        <span id="np-current-time">0:00</span>
-                        <span id="np-total-time">0:00</span>
-                    </div>
+        <div class="np-card-v2">
+            <div class="np-card-header">
+                <img id="np-thumb" src="https://via.placeholder.com/80x80" class="np-thumb-v2">
+                <div class="np-meta">
+                    <h3 id="np-title">Welcome to Karaoke</h3>
+                    <p id="np-artist">Ready to sing!</p>
                 </div>
             </div>
-        </section>
+            <div class="np-progress-v2">
+                <span id="np-current-time" class="time-label">0:00</span>
+                <div class="progress-track">
+                    <div id="np-progress-fill" class="progress-fill-v2"></div>
+                </div>
+                <span id="np-total-time" class="time-label">0:00</span>
+            </div>
+            <div class="np-controls">
+                <button id="remote-play-pause" class="btn-play-main">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                        <path d="M8 5v14l11-7z" id="play-icon-path" />
+                    </svg>
+                </button>
+                <button id="remote-skip" class="btn-skip" onclick="confirmSkipSong()">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
 
-        <!-- Playback Controls -->
-        <section class="playback-controls">
-            <button id="remote-play-pause" class="btn-play-pause-main">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-                    <path d="M8 5v14l11-7z" id="play-icon-path" />
-                </svg>
-            </button>
-            <button id="remote-skip" class="btn-skip-sub">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
-                </svg>
-            </button>
-        </section>
-
-        <!-- Volume Control -->
-        <section class="volume-control">
-            <p class="section-label">ระดับเสียง</p>
-            <div class="volume-card">
-                <svg viewBox="0 0 24 24" fill="white" width="18" height="18">
+        <!-- Volume Section -->
+        <div class="volume-section-v2">
+            <p class="section-title">ระดับเสียง</p>
+            <div class="volume-row">
+                <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)" width="20" height="20">
                     <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
                 </svg>
                 <input type="range" id="remote-volume" min="0" max="100" value="100">
-                <span id="volume-value">100</span>
+                <span id="volume-value" class="volume-number">100</span>
             </div>
-        </section>
+        </div>
 
         <!-- Search Section -->
-        <section class="remote-search-section">
-            <p class="section-label">ค้นหาเพลง</p>
-            <div class="search-filter-toggle">
-                <span class="toggle-label">ค้นเฉพาะคาราโอเกะ</span>
-                <label class="toggle-switch">
+        <div class="search-section-v2">
+            <div class="search-header">
+                <p class="section-title">ค้นหาเพลง</p>
+                <label class="toggle-compact">
+                    <span>ค้นเฉพาะคาราโอเกะ</span>
                     <input type="checkbox" id="remote-karaoke-filter-toggle" checked>
-                    <span class="toggle-slider"></span>
+                    <span class="toggle-dot"></span>
                 </label>
             </div>
-            <div class="search-input-group">
-                <input type="text" id="remote-search-input" placeholder="ค้นหาเพลงคาราโอเกะ...">
-                <button class="btn-clear-input" id="clear-remote-search-btn" onclick="clearRemoteSearchInput()"
+            <div class="search-box-v2">
+                <input type="text" id="remote-search-input" placeholder="ค้นหาเพลง...">
+                <button class="btn-clear-search" id="clear-remote-search-btn" onclick="clearRemoteSearchInput()"
                     style="display: none;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                        width="18" height="18">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16"
+                        height="16">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
             </div>
-            <!-- Search Results Inline -->
-            <div id="remote-results-overlay" class="results-overlay">
-                <div id="remote-results-list" class="remote-results-list"></div>
+            <div id="remote-results-overlay" class="results-overlay-v2">
+                <div id="remote-results-list" class="results-list-v2"></div>
             </div>
-        </section>
+        </div>
 
         <!-- Queue Section -->
-        <section class="remote-queue-section">
-            <div class="section-header">
-                <p class="section-label">คิวเพลง (<span id="queue-count-text">0</span>)</p>
-                <button class="btn-clear-remote" onclick="clearQueueRemote()">ล้างคิว</button>
+        <div class="queue-section-v2">
+            <div class="queue-header">
+                <p class="section-title">คิวเพลง (<span id="queue-count-text">0</span>)</p>
+                <!-- <button class="btn-clear-queue" onclick="clearQueueRemote()">ล้างคิว</button> -->
             </div>
-            <div id="remote-queue-list" class="remote-queue-list">
-                <!-- Queue items here -->
+            <div id="remote-queue-list" class="queue-list-v2">
+                <!-- Queue items -->
             </div>
-        </section>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Share Modal -->
+    <div id="share-modal" class="search-modal">
+        <div class="modal-content remote-modal-content">
+            <div class="modal-header">
+                <h3>แชร์รีโมท</h3>
+                <button class="btn-close" onclick="closeShareModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" width="20" height="20">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <p class="remote-hint">แชร์ QR Code หรือลิงก์เพื่อให้เพื่อนร่วมร้องเพลง!</p>
+
+            <div class="remote-qr-container">
+                <div id="share-qrcode"></div>
+            </div>
+
+            <div class="remote-info-grid">
+                <div class="info-item">
+                    <label>รหัสห้อง</label>
+                    <span id="share-room-id" class="neon-text-cyan">------</span>
+                </div>
+            </div>
+
+            <div class="remote-link-section">
+                <label>ลิงก์เข้าห้อง</label>
+                <div class="link-input-group">
+                    <input type="text" id="share-link-input" readonly value="">
+                    <button class="btn-copy-link" onclick="copyShareLink()">คัดลอก</button>
+                </div>
+            </div>
+
+            <div class="remote-modal-footer">
+                <button class="btn-footer-gray" onclick="closeShareModal()">ปิด</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Name Input Modal -->
+    <div id="name-modal" class="name-modal">
+        <div class="name-modal-content">
+            <div class="name-modal-icon">🎤</div>
+            <h3>ยินดีต้อนรับ!</h3>
+            <p>กรุณากรอกชื่อของคุณเพื่อเริ่มใช้งาน Remote</p>
+            <input type="text" id="user-name-input" placeholder="ชื่อของคุณ..." maxlength="20">
+            <button id="confirm-name-btn" class="btn-confirm-name">เข้าใช้งาน</button>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="confirm-modal">
+        <div class="confirm-modal-content">
+            <div class="confirm-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" width="48" height="48">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h3 id="confirm-title">ยืนยันการดำเนินการ</h3>
+            <p id="confirm-message">คุณแน่ใจหรือไม่?</p>
+            <div class="confirm-buttons">
+                <button class="btn-confirm-cancel" onclick="closeConfirmModal()">ยกเลิก</button>
+                <button class="btn-confirm-ok" id="confirm-ok-btn">ตกลง</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -114,9 +197,128 @@
         const roomId = urlParams.get('room');
 
         let isPlaying = false;
+        let userName = localStorage.getItem('remoteUserName') || '';
+        let shareQRGenerated = false;
+        let currentQueueRemote = [];
 
+        // Share Modal Functions
+        function openShareModal() {
+            const modal = document.getElementById('share-modal');
+            modal.classList.add('active');
+
+            // Generate QR code if not already done
+            if (!shareQRGenerated && roomId) {
+                const remoteUrl = `${window.location.origin}/remote.html?room=${roomId}`;
+                const qrContainer = document.getElementById('share-qrcode');
+                qrContainer.innerHTML = '';
+                new QRCode(qrContainer, {
+                    text: remoteUrl,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.L
+                });
+
+                document.getElementById('share-room-id').innerText = roomId;
+                document.getElementById('share-link-input').value = remoteUrl;
+                shareQRGenerated = true;
+            }
+        }
+
+        function closeShareModal() {
+            document.getElementById('share-modal').classList.remove('active');
+        }
+
+        function copyShareLink() {
+            const linkInput = document.getElementById('share-link-input');
+            linkInput.select();
+            document.execCommand('copy');
+            showToast('คัดลอกลิงก์แล้ว!');
+        }
+
+        // Show name modal
+        function showNameModal() {
+            const input = document.getElementById('user-name-input');
+            if (userName) {
+                input.value = userName;
+            }
+            document.getElementById('name-modal').classList.add('active');
+            input.focus();
+            input.select();
+        }
+
+        function confirmName() {
+            const nameInput = document.getElementById('user-name-input');
+            const name = nameInput.value.trim();
+            if (name.length < 1) {
+                nameInput.style.borderColor = '#ff4d4d';
+                nameInput.placeholder = 'กรุณากรอกชื่อ!';
+                return;
+            }
+            userName = name;
+            localStorage.setItem('remoteUserName', userName);
+            document.getElementById('name-modal').classList.remove('active');
+            document.getElementById('user-name-display').innerText = userName;
+
+            // Now join the room
+            if (roomId) {
+                socket.emit('join-room', roomId);
+            }
+        }
+
+        // Confirm Modal Functions
+        let confirmCallback = null;
+
+        function showConfirmModal(title, message, callback) {
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-message').innerText = message;
+            confirmCallback = callback;
+            document.getElementById('confirm-modal').classList.add('active');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').classList.remove('active');
+            confirmCallback = null;
+        }
+
+        document.getElementById('confirm-ok-btn').onclick = () => {
+            if (confirmCallback) confirmCallback();
+            closeConfirmModal();
+        };
+
+        // Skip song with confirmation
+        function confirmSkipSong() {
+            if (currentQueueRemote.length === 0) {
+                showToast('ไม่มีเพลงในคิว');
+                return;
+            }
+            showConfirmModal(
+                'ข้ามเพลง',
+                'ต้องการข้ามเพลงนี้ใช่หรือไม่?',
+                () => {
+                    socket.emit('skip-song', roomId);
+                }
+            );
+        }
+
+        // Display username on load
+        if (userName) {
+            document.getElementById('user-name-display').innerText = userName;
+        }
+
+        document.getElementById('confirm-name-btn').onclick = confirmName;
+        document.getElementById('user-name-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') confirmName();
+        });
+
+        // Check if name exists, if not show modal, else join room
         if (roomId) {
-            socket.emit('join-room', roomId);
+            if (!userName) {
+                showNameModal();
+            } else {
+                socket.emit('join-room', roomId);
+            }
         } else {
             alert("ไม่พบรหัสห้อง กรุณาสแกน QR Code ใหม่อีกครั้ง");
         }
@@ -161,6 +363,7 @@
 
         // Helper function to update queue UI
         function updateQueueUI(queue) {
+            currentQueueRemote = queue;
             const queueList = document.getElementById('remote-queue-list');
             const queueCount = document.getElementById('queue-count-text');
             queueCount.innerText = queue.length;
@@ -168,23 +371,18 @@
 
             queue.forEach((song, index) => {
                 const card = document.createElement('div');
-                card.className = 'remote-queue-item';
+                card.className = 'queue-item-v2';
                 card.innerHTML = `
-                    <div class="qi-inner">
-                        <span class="qi-index">${index + 1}</span>
-                        <img src="${song.thumbnail}" class="qi-thumb">
-                        <div class="qi-info">
-                            <h4>${song.title}</h4>
-                            <p>${song.author}</p>
-                        </div>
-                        <div class="qi-actions">
-                            <button class="btn-qi-play" onclick="playSpecificRemote(${index})">
-                                <svg viewBox="0 0 24 24" fill="var(--accent-color)" width="18" height="18"><path d="M8 5v14l11-7z"/></svg>
-                            </button>
-                            <button class="btn-qi-delete" onclick="removeSpecificRemote(${index})">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="#ff4d4d" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                            </button>
-                        </div>
+                    <span class="qi-num">${index + 1}</span>
+                    <img src="${song.thumbnail}" class="qi-thumb-v2">
+                    <div class="qi-meta">
+                        <h4>${song.title}</h4>
+                        <p>${song.author}</p>
+                        ${song.addedBy ? `<span class="qi-by">${song.addedBy}</span>` : ''}
+                    </div>
+                    <div class="qi-btns">
+                        <button class="qi-play" onclick="playSpecificRemote(${index})">▶</button>
+                        <button class="qi-del" onclick="removeSpecificRemote(${index})">✕</button>
                     </div>
                 `;
                 queueList.appendChild(card);
@@ -290,10 +488,28 @@
                     </div>
                     <button class="btn-add-remote">+ เพิ่ม</button>
                 `;
-                card.querySelector('.btn-add-remote').onclick = () => {
-                    socket.emit('add-to-queue', { roomId, song });
-                    searchInput.value = '';
-                    resultsOverlay.classList.remove('active');
+                card.querySelector('.btn-add-remote').onclick = (e) => {
+                    const btn = e.currentTarget;
+                    const originalText = btn.innerHTML;
+
+                    // Add song with user name
+                    const songWithUser = { ...song, addedBy: userName };
+                    socket.emit('add-to-queue', { roomId, song: songWithUser });
+
+                    // Button feedback
+                    btn.innerHTML = '✓ เพิ่มแล้ว';
+                    btn.classList.add('added');
+                    btn.disabled = true;
+
+                    // Show toast
+                    showToast(`เพิ่ม "${song.title.substring(0, 30)}..." ลงคิวแล้ว`);
+
+                    // Reset button after 1.5 seconds
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.classList.remove('added');
+                        btn.disabled = false;
+                    }, 1500);
                 };
                 resultsList.appendChild(card);
             });
@@ -319,11 +535,7 @@
             socket.emit('toggle-play', roomId);
         };
 
-        document.getElementById('remote-skip').onclick = () => {
-            if (confirm('ข้ามเพลงนี้ใช่หรือไม่?')) {
-                socket.emit('skip-song', roomId);
-            }
-        };
+        // Skip is handled by onclick="confirmSkipSong()" in HTML
 
         const volRange = document.getElementById('remote-volume');
         const volVal = document.getElementById('volume-value');
@@ -333,9 +545,13 @@
         };
 
         function clearQueueRemote() {
-            if (confirm('คุณต้องการล้างคิวเพลงทั้งหมดหรือไม่?')) {
-                socket.emit('clear-queue', roomId);
-            }
+            showConfirmModal(
+                'ล้างคิวเพลง',
+                'ต้องการล้างคิวเพลงทั้งหมดใช่หรือไม่?',
+                () => {
+                    socket.emit('clear-queue', roomId);
+                }
+            );
         }
 
         // Socket Events - Real-time updates
@@ -382,6 +598,16 @@
             const min = Math.floor(s / 60);
             const sec = Math.floor(s % 60);
             return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        // Toast notification function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
         }
     </script>
 </body>

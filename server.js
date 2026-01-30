@@ -2,11 +2,17 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
-const ytsr = require('ytsr');
+const yts = require('yt-search');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    },
+    transports: ['websocket', 'polling']
+});
 
 const PORT = process.env.PORT || 3000;
 
@@ -28,16 +34,14 @@ app.get('/api/search', async (req, res) => {
     try {
         // Optionally enforce "karaoke" search
         const searchQuery = karaokeOnly ? `${query} karaoke` : query;
-        const searchResults = await ytsr(searchQuery, { limit: 15 });
-        const songs = searchResults.items
-            .filter(item => item.type === 'video')
-            .map(video => ({
-                id: video.id,
-                title: video.title,
-                thumbnail: video.bestThumbnail.url,
-                duration: video.duration,
-                author: video.author.name
-            }));
+        const searchResults = await yts(searchQuery);
+        const songs = searchResults.videos.slice(0, 15).map(video => ({
+            id: video.videoId,
+            title: video.title,
+            thumbnail: video.thumbnail,
+            duration: video.timestamp,
+            author: video.author.name
+        }));
         res.json(songs);
     } catch (error) {
         console.error('Search error:', error);
@@ -154,5 +158,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, () => {
-    console.log(`Server running on https://online-to-github.onrender.com:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

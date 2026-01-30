@@ -256,6 +256,35 @@
             </div>
         </div>
 
+        <!-- Empty Queue Modal -->
+        <div id="empty-queue-modal" class="empty-queue-modal">
+            <div class="empty-queue-modal-content">
+                <button class="btn-close-empty-modal" onclick="hideEmptyQueueModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="empty-queue-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="80"
+                        height="80">
+                        <path d="M9 18V5l12-2v13" />
+                        <circle cx="6" cy="18" r="3" />
+                        <circle cx="18" cy="16" r="3" />
+                    </svg>
+                </div>
+                <h2 class="empty-queue-title">ไม่มีเพลงในคิว</h2>
+                <p class="empty-queue-subtitle">สแกน QR Code เพื่อเพิ่มเพลง</p>
+                <div class="empty-queue-qr-container">
+                    <div id="empty-queue-qrcode"></div>
+                </div>
+                <div class="empty-queue-room-info">
+                    <span>รหัสห้อง: <strong id="empty-queue-room-id">------</strong></span>
+                </div>
+                <button class="btn-home-empty" onclick="window.location.href='/'">กลับหน้าหลัก</button>
+            </div>
+        </div>
+
         <!-- Scoring Overlay -->
         <div id="score-overlay">
             <div class="score-card">
@@ -267,18 +296,32 @@
     </div>
 
     <!-- Hidden queue source for toggle -->
+    <!-- Hidden queue source for toggle -->
     <div id="queue-source" style="display: none;">
         <div id="queue-list"></div>
     </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
 
     <script>
         const socket = io();
         let player;
         let currentRoomId = '';
+        let currentQueue = [];
         let currentSong = null;
         let isPlaying = false;
         let progressInterval;
         let searchTimeout;
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
         const modalSearchInput = document.getElementById('modal-search-input');
         const clearModalSearchBtn = document.getElementById('clear-modal-search-btn');
 
@@ -322,7 +365,8 @@
                 },
                 events: {
                     'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError
                 }
             });
         }
@@ -357,6 +401,10 @@
         }
 
         function skipToNext() {
+            if (currentQueue.length === 0) {
+                showToast('ไม่มีเพลงในคิว');
+                return;
+            }
             if (currentRoomId) {
                 socket.emit('request-next', currentRoomId);
             }
@@ -384,8 +432,27 @@
                     mobileIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
                 }
             } else if (event.data == YT.PlayerState.ENDED) {
-                showScore();
+                socket.emit('request-next', currentRoomId);
             }
+        }
+
+        // Handle YouTube Player Errors - Skip to next song if current cannot play
+        function onPlayerError(event) {
+            console.error('YouTube Player Error:', event.data);
+            const errorMessages = {
+                2: 'Invalid video ID',
+                5: 'HTML5 player error',
+                100: 'Video not found or private',
+                101: 'Video cannot be played in embedded players',
+                150: 'Video cannot be played in embedded players'
+            };
+            const errorMsg = errorMessages[event.data] || 'Unknown error';
+            showToast(`ไม่สามารถเล่นเพลงนี้ได้: ${errorMsg}`);
+
+            // Skip to next song after a short delay
+            setTimeout(() => {
+                socket.emit('request-next', currentRoomId);
+            }, 1500);
         }
 
         // Controls
@@ -461,9 +528,24 @@
                             <span class="btn-text">เพิ่ม</span>
                         </button>
                     `;
-                    card.querySelector('.btn-add-modal').onclick = () => {
+                    card.querySelector('.btn-add-modal').onclick = (e) => {
+                        const btn = e.currentTarget;
+                        const originalText = btn.innerHTML;
+
                         socket.emit('add-to-queue', { roomId: currentRoomId, song });
-                        closeSearchModal();
+
+                        // Feedback
+                        btn.innerHTML = '✓';
+                        btn.classList.add('added');
+                        btn.disabled = true;
+
+                        showToast(`เพิ่ม "${song.title.substring(0, 30)}..." ลงคิวแล้ว`);
+
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                            btn.classList.remove('added');
+                            btn.disabled = false;
+                        }, 1500);
                     };
                     resultsList.appendChild(card);
                 });
@@ -490,9 +572,13 @@
         });
 
         function clearQueue() {
-            if (confirm('คุณต้องการล้างคิวเพลงทั้งหมดหรือไม่?')) {
-                socket.emit('clear-queue', currentRoomId);
-            }
+            showConfirmModal(
+                'ล้างคิวเพลง',
+                'คุณต้องการล้างคิวเพลงทั้งหมดหรือไม่?',
+                () => {
+                    socket.emit('clear-queue', currentRoomId);
+                }
+            );
         }
 
         function openRemoteModal() {
@@ -529,16 +615,29 @@
             qrContainer.innerHTML = ''; // Clear previous
             new QRCode(qrContainer, {
                 text: remoteUrl,
-                width: 180,
-                height: 180,
+                width: 256,
+                height: 256,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
+                correctLevel: QRCode.CorrectLevel.L
             });
 
             // Update link input
             document.getElementById('remote-link-input').value = remoteUrl;
             console.log("Remote URL:", remoteUrl);
+
+            // Generate QR Code for Empty Queue Modal
+            const emptyQueueQrContainer = document.getElementById("empty-queue-qrcode");
+            emptyQueueQrContainer.innerHTML = '';
+            new QRCode(emptyQueueQrContainer, {
+                text: remoteUrl,
+                width: 256,
+                height: 256,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L
+            });
+            document.getElementById('empty-queue-room-id').innerText = roomId;
 
             // Handle automatic song addition from landing page
             const urlParams = new URLSearchParams(window.location.search);
@@ -558,6 +657,7 @@
         });
 
         socket.on('queue-updated', (queue) => {
+            currentQueue = queue;
             const queueListDisplay = document.getElementById('queue-list-display');
             const queueCount = document.getElementById('queue-count');
 
@@ -573,6 +673,7 @@
                         <div class="queue-card-info">
                             <h4 class="queue-card-title">${song.title}</h4>
                             <p class="queue-card-author">${song.author}</p>
+                            ${song.addedBy ? `<span class="queue-card-added-by">เพิ่มโดย: ${song.addedBy}</span>` : ''}
                         </div>
                         <div class="queue-card-actions">
                             <button class="btn-play-now" title="เล่นทันที">
@@ -604,6 +705,11 @@
             if (!currentSong && queue.length > 0) {
                 socket.emit('request-next', currentRoomId);
             }
+
+            // Close empty queue modal if songs are added
+            if (queue.length > 0) {
+                hideEmptyQueueModal();
+            }
         });
 
         socket.on('play-song', (song) => {
@@ -612,15 +718,19 @@
                 document.getElementById('current-title').innerText = song.title;
                 document.getElementById('current-artist').innerText = song.author;
                 player.loadVideoById(song.id);
+                // Hide empty queue modal when song starts playing
+                hideEmptyQueueModal();
             } else {
                 currentSong = null;
                 document.getElementById('current-title').innerText = "Welcome to Karaoke";
                 document.getElementById('current-artist').innerText = "Scan QR to start singing!";
+                // Show empty queue modal when no songs left
+                showEmptyQueueModal();
             }
         });
 
         socket.on('force-skip', () => {
-            socket.emit('request-next', currentRoomId);
+            skipToNext();
         });
 
         socket.on('toggle-play', () => {
@@ -647,6 +757,15 @@
                 overlay.style.display = 'none';
                 socket.emit('request-next', currentRoomId);
             }, 5000);
+        }
+
+        // Empty Queue Modal Functions
+        function showEmptyQueueModal() {
+            document.getElementById('empty-queue-modal').classList.add('active');
+        }
+
+        function hideEmptyQueueModal() {
+            document.getElementById('empty-queue-modal').classList.remove('active');
         }
 
         // Auto-hide controls after 5 seconds of no mouse movement (fullscreen only)
